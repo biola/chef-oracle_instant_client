@@ -14,9 +14,11 @@ directory base_dir do
 end
 
 node['oracle_instant_client']['files'].each do |name, url|
-  remote_file File.join(base_dir, "instantclient-#{name}.zip") do
-    source url
-    action :create_if_missing
+  unless url.nil?
+    remote_file File.join(base_dir, "instantclient-#{name}.zip") do
+      source url
+      action :create_if_missing
+    end
   end
 end
 
@@ -48,7 +50,7 @@ end
 # the first chef-client run
 ruby_block 'oic_ldlibrary_setup' do
   block do
-    
+
     r = Chef::Resource::Template.new('oracle_instant_client_profile', run_context)
     r.path       '/etc/profile.d/oracle_instant_client.sh'
     r.source     'oracle_instant_client.sh.erb'
@@ -57,6 +59,6 @@ ruby_block 'oic_ldlibrary_setup' do
       :lib_path => Dir[File.join(base_dir, 'instantclient*')].find { |f| File.directory?(f) }
     })
     r.run_action :create
-    
+
   end
 end
