@@ -1,2 +1,2 @@
-export NLS_LANG="AMERICAN_AMERICA.UTF8"
+export NLS_LANG="<%= node['oracle_instant_client']['nls_lang'] %>"
 export LD_LIBRARY_PATH=<%= @lib_path %>${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
